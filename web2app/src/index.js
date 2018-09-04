@@ -14,9 +14,15 @@ require('./css/icons-extra.css');
 ReactDOM.render(
 	<Router>
 		<div>
-			<Route exact path='/' component={Home} />
+			<Route exact path='/risdz/view/build/index.html' component={Home} />
 			<Route exact path='/list' component={List} />
 		</div>
 	</Router>
 	, document.getElementById('root')
 );
+
+/*ReactDOM.render(
+	<Home/>
+	, document.getElementById('root')
+);
+*/
