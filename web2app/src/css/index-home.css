@@ -1,0 +1,32 @@
+/*首页菜单页*/
+.mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body {
+    font-size: 12px;
+    line-height:15px;
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    color: black;
+    word-wrap:break-word; 
+    word-break:break-all; 
+    height: 30px;
+    white-space:pre-wrap;
+    overflow: hidden;
+    padding:0 6px 0 6px;
+}.mui-grid-view.mui-grid-9 {
+    margin: 0;
+    padding:0;
+    border-top:0px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD;
+    background-color: #f2f2f2
+}.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+    margin: 0;
+    padding:0;
+    vertical-align: top;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    height: 85px;
+    background-color: #FFFFFF;
+}
+.mui-pull-bottom-pocket{
+    height: 60px;
+}
