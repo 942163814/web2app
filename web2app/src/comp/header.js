@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router';
+import app from '../js/app.js';
 
 /*头部*/
 class Header extends React.Component{
@@ -14,7 +15,7 @@ class Header extends React.Component{
 
 	back(e){
 		this.setState({
-			back : '/'
+			back : app.getup()
 		})
 	}
 	

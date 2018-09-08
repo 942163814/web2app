@@ -92,7 +92,7 @@ class IndexMenu extends React.Component{
 		var url = target.getAttribute('url');
 
 		this.setState({
-			redirect:'/list?code=' + href + '&name=' + name + '&leaf=' + leaf
+			redirect:'/list?code=' + href + '&name=' + name + '&leaf=' + leaf + '&up=' + app.uplink()
 		})
 
 	}

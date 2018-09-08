@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import app from '../js/app.js';
-import { Redirect } from 'react-router';
 import Header from '../comp/header.js';
 import listData from '../js/list_data.js'
 
@@ -82,10 +81,41 @@ class List extends React.Component{
 		return(
 			<div>
 				<Header titleName={title} rbut="show" abut={abut}/>
+					<div className="outer" style={{borderTop}}"border-top: solid 1px #ccc;">
+					    <div class="inner">
+					        <ul class="lists">
+					            
+					        </ul>
+					    </div>
+				</div>
+				{
+					this.state.ldata.rows1.map((item) => {
+						return(
+							<ListItem key={item.bm} listData={item} />
+						)
+					})
+				}
 			</div>
 		)
 	}
 
+}
+
+//列表项
+class ListItem extends React.Component{
+	constructor(props){
+		super(props);
+/*
+		const {listData} = this.props;
+
+		this.state = {listData};*/
+	}
+
+	render(){
+		return(
+
+		)
+	}
 }
 
 export default List;
