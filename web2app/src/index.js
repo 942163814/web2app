@@ -12,6 +12,7 @@ require('./css/mui.css');
 require('./css/app.css');
 require('./css/icons-extra.css');
 
+//首页
 ReactDOM.render(
 	<div>
 		<Router>
@@ -23,9 +24,3 @@ ReactDOM.render(
 	</div>
 	, document.getElementById('root')
 );
-
-/*ReactDOM.render(
-	<Home/>
-	, document.getElementById('root')
-);
-*/
