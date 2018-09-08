@@ -46,10 +46,13 @@ class Header extends React.Component{
 		}
 
 		return(
-			<div id="header" className="mui-bar mui-bar-nav">
-				{rbut}
-				{abut}
-				<h1 id="mui_title" className="mui-title">{this.props.titleName}</h1>
+			<div>
+				<div id="header" className="mui-bar mui-bar-nav">
+					{rbut}
+					{abut}
+					<h1 id="mui_title" className="mui-title">{this.props.titleName}</h1>
+				</div>
+				<div style={{height:44}}>header</div>
 			</div>
 		)
 	}

@@ -4,8 +4,11 @@ const app = {
 	domain: 'http://localhost:8088',
 
 	ajax: function(param) {
+
+		const url = param.url.indexOf('?') < 0 ? param.url + '?temianl=app' : param.url + '&temianl=app';
+
 		$.ajax({
-			url: param.url,
+			url: url,
 			dataType: 'json',
 			data: '',
 			timeout: '30000',

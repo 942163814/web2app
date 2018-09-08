@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import app from '../js/app.js';
 import Header from '../comp/header.js';
-import listData from '../js/list_data.js'
+import listData from '../js/list_data.js';
+import '../css/list.css';
 
 class List extends React.Component{
 
@@ -15,7 +16,10 @@ class List extends React.Component{
 			module : '',
 			type : '',
 			data : [],
-			ldata : null
+			ldata : [],
+			TotalCount: 0,
+			TotalPageCount: 0,
+			PageIndex: 1
 		}
 	}
 	
@@ -40,12 +44,14 @@ class List extends React.Component{
 		}
 
 		app.ajax({
-			url : app.domain + '/' + api,
+			url : app.domain + '/' + api + '?pageIndex=1' + '&pageSize=15',
 			success:(data)=>{
 				if(data.outOk == '1') {
-					this.setState({
-						ldata:data
-					})
+					if(data.outOk == '1'){
+						this.setState({
+							ldata:data.rows1
+						})
+					}
 				}
 			}
 		});
@@ -81,20 +87,20 @@ class List extends React.Component{
 		return(
 			<div>
 				<Header titleName={title} rbut="show" abut={abut}/>
-					<div className="outer" style={{borderTop}}"border-top: solid 1px #ccc;">
-					    <div class="inner">
-					        <ul class="lists">
-					            
-					        </ul>
-					    </div>
+				<div className="outer" style={{borderTop:'solid 1px #ccc'}}>
+				    <div className="inner">
+				        <ul className="lists">
+				            {
+								this.state.ldata.map((item) => {
+									return(
+										<ListItem key={item.bm} listData={item} modeData={this.state.data} />
+									)
+								})
+							}
+				        </ul>
+				    </div>
 				</div>
-				{
-					this.state.ldata.rows1.map((item) => {
-						return(
-							<ListItem key={item.bm} listData={item} />
-						)
-					})
-				}
+				
 			</div>
 		)
 	}
@@ -109,13 +115,110 @@ class ListItem extends React.Component{
 		const {listData} = this.props;
 
 		this.state = {listData};*/
+
+		//this.analysis = this.analysis.bind(this);
+
+	}
+
+	analysis(params){
+		const fields = params.fields.split(',');
+		const {listData} = this.props;
+		const title = (
+			<div>
+				{
+					fields.map((field) => {
+						let type = '';
+						if(field.indexOf('*') != -1) {
+							let s = field.split(':');
+							if(s.length = 2) {
+								type = s[0];
+								field = s[1]
+							}
+						}
+
+						let value = app.decodeURIComponent(listData[field]);
+
+						//特殊处理字段
+						if(type != '') {
+
+							if(type == '*yyyy-mm-dd') { //时间格式
+								value = value.split(' ')[0];
+							} else if(type == '*yyyy-mm-dd-hh-mm') { //时间格式
+								value = value.substring(0,16);
+							} else if(type == "*replace") { //替换
+								//*replace:||{CP} 违法行为:{WeiFXWMC}违法人:{XingM}[{phone}]$CP,WeiFXWMC,XingM,phone
+								var pz = params.fields.split("||")[1];
+								var fields = pz.split("$")[1];
+								value = pz.split("$")[0];
+								var field = fields.split(",");
+								for(var k = 0; k < field.length; k++) {
+									value = value.replace("{" + field[k] + "}", app.base.decodeURIComponent(listData[field[k]]));
+								}
+							} else if(type == "*sfck") {
+								if(value == '0'){
+									value = (
+										<font color="red">未读</font>
+									)
+								}
+								else if(value == '1'){
+									value = (
+										<font color="#ccc">已读</font>
+									)
+								}
+							}
+						}
+
+						return (
+							<span>
+								{value}{params.separate}
+							</span>
+						);
+					})
+				}
+			</div>
+		);
+		
+		
+		return title;
+
 	}
 
 	render(){
-		return(
 
+		let innerDom = '';
+		
+		if (this.props.modeData.list.show.type === 'concise'){
+			const ZhuT = this.analysis({fields:this.props.modeData.list.show.ZhuT,separate: ''});
+			innerDom = (
+				<a className="mui-navigate-right">
+					{ZhuT}
+				</a>
+			)
+		} else if (this.props.modeData.list.show.type === 'double'){
+			const h4 = this.analysis({fields:this.props.modeData.list.show.h4,separate: ' '});
+			const p = this.analysis({fields:this.props.modeData.list.show.p,separate: '|'});
+			innerDom = (
+				<div className="mui-table list_items">
+					<div className="mui-table-cell mui-col-xs-10">
+						<h4 className="mui-ellipsis-2" style={{fontSize: 16}}>
+							{h4}
+						</h4>
+						<p className="mui-h6 mui-ellipsis">
+							{p}
+						</p>
+					</div>
+				</div>
+			)
+		}
+
+		return(
+			<li className="mui-table-view-cell">
+				{innerDom}
+			</li>
 		)
 	}
+
+
 }
 
 export default List;
