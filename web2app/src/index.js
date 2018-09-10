@@ -8,6 +8,7 @@ import {
 import { Redirect } from 'react-router';
 import Home from './frame/index-home.js'; //首页
 import List from './template/list.js'; //列表
+import View from './template/view.js'; //详情
 require('./css/mui.css');
 require('./css/app.css');
 require('./css/icons-extra.css');
@@ -19,6 +20,7 @@ ReactDOM.render(
 			<div>
 				<Route exact path='/risdz/view/build/index.html' component={Home} />
 				<Route exact path='/list' component={List} />
+				<Route exact path='/view' component={View} />
 			</div>
 		</Router>
 	</div>

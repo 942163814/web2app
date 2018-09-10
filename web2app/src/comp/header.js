@@ -14,6 +14,7 @@ class Header extends React.Component{
 	}
 
 	back(e){
+
 		this.setState({
 			back : app.getup()
 		})

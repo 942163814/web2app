@@ -73,11 +73,20 @@ const app = {
 	 * 历史url
 	 */
 	uplink: function() {
-		return app.encodeURIComponent(window.location.pathname);
+		return '&up=' + app.encodeURIComponent(window.location.pathname + window.location.search);
 	},
 
 	getup: function() {
-		return app.decodeURIComponent(app.getQueryString('up'));
+
+		let up = app.decodeURIComponent(app.getQueryString('up'));
+
+
+		if(up.indexOf('up=') > -1){
+			up = up.split('up=');
+			up = up[0] + 'up=' + app.encodeURIComponent(up[1])
+		}
+
+		return up
 	}
 
 }

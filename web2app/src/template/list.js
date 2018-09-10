@@ -4,6 +4,7 @@ import app from '../js/app.js';
 import Header from '../comp/header.js';
 import listData from '../js/list_data.js';
 import '../css/list.css';
+import { Redirect } from 'react-router';
 
 class List extends React.Component{
 
@@ -21,6 +22,7 @@ class List extends React.Component{
 			TotalPageCount: 0,
 			PageIndex: 1
 		}
+
 	}
 	
 	componentDidMount(){
@@ -117,16 +119,19 @@ class ListItem extends React.Component{
 		this.state = {listData};*/
 
 		//this.analysis = this.analysis.bind(this);
-
+		this.state = {
+			viewurl:''
+		}
+		this.clickItem = this.clickItem.bind(this);
 	}
 
 	analysis(params){
 		const fields = params.fields.split(',');
 		const {listData} = this.props;
 		const title = (
-			<div>
+			<span>
 				{
-					fields.map((field) => {
+					fields.map((field,index) => {
 						let type = '';
 						if(field.indexOf('*') != -1) {
 							let s = field.split(':');
@@ -169,13 +174,13 @@ class ListItem extends React.Component{
 						}
 
 						return (
-							<span>
+							<span key={index}>
 								{value}{params.separate}
 							</span>
 						);
 					})
 				}
-			</div>
+			</span>
 		);
 		
 		
@@ -183,7 +188,29 @@ class ListItem extends React.Component{
 
 	}
 
+	//点击列表项
+	clickItem(){
+
+		var code = app.getQueryString("code");
+		var leaf = app.getQueryString("leaf");
+		var module = "";
+
+		if(leaf!="1"){
+			module= code.split(':')[0];
+		}else{
+			module = code.split(':')[0]+"_"+code.split(':')[1];
+		}
+
+		this.setState({
+			viewurl:'/view?code=' + this.props.listData.bm + '&module=' + module + app.uplink()
+		})
+	}
+
 	render(){
+
+		if(this.state.viewurl != ''){
+			return (<Redirect to={this.state.viewurl} />)
+		}
 
 		let innerDom = '';
 		
@@ -212,7 +239,7 @@ class ListItem extends React.Component{
 		}
 
 		return(
-			<li className="mui-table-view-cell">
+			<li className="mui-table-view-cell" onClick={this.clickItem}>
 				{innerDom}
 			</li>
 		)
