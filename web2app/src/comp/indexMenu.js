@@ -101,7 +101,7 @@ class IndexMenu extends React.Component{
 	componentDidMount(){
 		
 		app.ajax({
-			url : app.domain + '/user_menu',
+			url : app.userMenu,
 			success:(data)=>{
 				if(data.outOk == '1') {
 					this.setState({

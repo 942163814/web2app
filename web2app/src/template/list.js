@@ -23,9 +23,19 @@ class List extends React.Component{
 			PageIndex: 1
 		}
 
+		this.scrollHandler = this.scrollHandler.bind(this);
+	}
+
+	scrollHandler(event){
+		let scrollTop = event.currentTarget.scrollTop;
+		console.log(scrollTop);
+        if(scrollTop === 0){
+        	console.log(scrollTop);
+        }
 	}
 	
 	componentDidMount(){
+
 		var code = app.getQueryString("code");
 		var name = app.getQueryString("name");
 		var leaf = app.getQueryString("leaf");
@@ -90,7 +100,7 @@ class List extends React.Component{
 			<div>
 				<Header titleName={title} rbut="show" abut={abut}/>
 				<div className="outer" style={{borderTop:'solid 1px #ccc'}}>
-				    <div className="inner">
+				    <div className="inner" onScroll={this.scrollHandler}>
 				        <ul className="lists">
 				            {
 								this.state.ldata.map((item) => {

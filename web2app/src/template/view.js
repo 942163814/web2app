@@ -46,7 +46,7 @@ class View extends React.Component{
 				{
 					this.state.field.map((item) => {
 						return (
-							<Field key={item.code} item={item} />
+							<Field key={item.code} item={item} vdata={this.state.vdata} />
 						)
 					})
 				}
@@ -67,12 +67,33 @@ class Field extends React.Component{
 	render(){
 		const {type} = this.props.item;
 		const {title} = this.props.item;
+		const {code} = this.props.item;
+		const {vdata} = this.props;
+		let value = '';
+
+		if(JSON.stringify(vdata) != '{}'){
+			value = vdata.rows1[code];
+		}
+
 		let itemDom = (<div></div>);
-		if(type === 'text'){//文本
-			itemDom = (<div className="mui-input-row">
-				<label>{title}</label>
-				<div className="wrapdiv info"></div>
-			</div>)
+		if (type === 'text'){//文本
+			itemDom = (
+				<div className="mui-input-row">
+					<label>{title}</label>
+					<div className="wrapdiv info">{value}</div>
+				</div>
+			)
+		} else if (type === 'cont') {
+			itemDom = (
+				<div>
+					<div className="mui-input-title" style = {{borderTop:0}}>
+						{title}
+					</div>
+					<div className="wrapdivtextarea info" dangerouslySetInnerHTML={{ __html: value}}>
+					</div>
+				</div>
+				
+			)
 		}
 
 		return(
