@@ -1,8 +1,10 @@
 import $ from 'jquery';
 
 const app = {
+	//domain: 'http://192.168.1.172:8081/risdz/api',
+	//userMenu: 'http://192.168.1.172:8081/risdz/upload/user_menu',//菜单
 	domain: 'http://localhost:8088',
-
+	userMenu: 'http://localhost:8088/user_menu',
 	ajax: function(param) {
 
 		const url = param.url.indexOf('?') < 0 ? param.url + '?temianl=app' : param.url + '&temianl=app';
@@ -73,11 +75,20 @@ const app = {
 	 * 历史url
 	 */
 	uplink: function() {
-		return app.encodeURIComponent(window.location.pathname);
+		return '&up=' + app.encodeURIComponent(window.location.pathname + window.location.search);
 	},
 
 	getup: function() {
-		return app.decodeURIComponent(app.getQueryString('up'));
+
+		let up = app.decodeURIComponent(app.getQueryString('up'));
+
+
+		if(up.indexOf('up=') > -1){
+			up = up.split('up=');
+			up = up[0] + 'up=' + app.encodeURIComponent(up[1])
+		}
+
+		return up
 	}
 
 }

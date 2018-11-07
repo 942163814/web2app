@@ -92,7 +92,7 @@ class IndexMenu extends React.Component{
 		var url = target.getAttribute('url');
 
 		this.setState({
-			redirect:'/list?code=' + href + '&name=' + name + '&leaf=' + leaf + '&up=' + app.uplink()
+			redirect:'/list?code=' + href + '&name=' + name + '&leaf=' + leaf + app.uplink()
 		})
 
 	}
@@ -101,7 +101,7 @@ class IndexMenu extends React.Component{
 	componentDidMount(){
 		
 		app.ajax({
-			url : app.domain + '/user_menu',
+			url : app.userMenu,
 			success:(data)=>{
 				if(data.outOk == '1') {
 					this.setState({
