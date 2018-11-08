@@ -20,7 +20,8 @@ ReactDOM.render(
 		<Router>
 			<div>
 				<Route exact path='/risdz/view/build/index.html' component={Home} />
-				<Route exact path='/list' component={ListDemo} />
+				<Route exact path='/listDemo' component={ListDemo} />
+				<Route exact path='/list' component={List} />
 				<Route exact path='/view' component={View} />
 			</div>
 		</Router>

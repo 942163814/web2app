@@ -20,21 +20,31 @@ class List extends React.Component{
 			ldata : [],
 			TotalCount: 0,
 			TotalPageCount: 0,
-			PageIndex: 1
+			PageIndex: 1,
+			PageSize: 15
 		}
 
-		this.scrollHandler = this.scrollHandler.bind(this);
+		//this.scrollHandler = this.scrollHandler.bind(this);
+		this.loadList = this.loadList.bind(this);
 	}
 
-	scrollHandler(event){
+	/*scrollHandler(event){
 		let scrollTop = event.currentTarget.scrollTop;
-		console.log(scrollTop);
         if(scrollTop === 0){
         	console.log(scrollTop);
         }
-	}
+	}*/
 	
 	componentDidMount(){
+
+		/*上拉加载下拉刷新参数*/
+		let start;  // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
+		let refresh = false;
+		let isLoad = false;
+		const list = document.getElementById('list');
+		const headerTop = document.getElementById('headerTop');
+		headerTop.innerHTML = "下拉刷新"; 
+		/*上拉加载下拉刷新参数*/
 
 		var code = app.getQueryString("code");
 		var name = app.getQueryString("name");
@@ -49,24 +59,6 @@ class List extends React.Component{
 		var type = code.split(':')[1];
 		
 		var data = listData[module];
-		
-		let api = '';
-		if(type == 'zllr' || type == 'list') {
-			api = data.base.listlr;
-		}
-
-		app.ajax({
-			url : app.domain + '/' + api + '?pageIndex=1' + '&pageSize=15',
-			success:(data)=>{
-				if(data.outOk == '1') {
-					if(data.outOk == '1'){
-						this.setState({
-							ldata:data.rows1
-						})
-					}
-				}
-			}
-		});
 
 		this.setState({
 			code : code,
@@ -77,6 +69,84 @@ class List extends React.Component{
 			data : data
 		});
 
+		this.loadList();
+
+		list.addEventListener('touchstart',function(event){ 
+	   		let touch = event.touches[0]; 
+	   		start = touch.pageY; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标 
+	   	},false); 
+
+		list.addEventListener('touchmove',function(event){ // 下拉刷新 
+	   		let touch = event.touches[0]; 
+	   		if(list.scrollTop<=0){ 
+		   		// 若ul偏移量过大,则修改文字,refresh置为true,配合'touchend'刷新 
+		   		if(list.offsetTop>=60) { 
+		   			headerTop.innerHTML = "释放刷新"; 
+		   			refresh = true; 
+		   		} else {
+		   			// 如果ul列表到顶部，修改ul列表的偏移,显示“下拉刷新”，并准备触发下拉刷新功能，可自定义 
+			   		list.style.top = list.offsetTop + touch.pageY - start +'px'; // ul.style.top = ul.offsetTop + 'px' 
+			   		headerTop.style.top = list.style.top;
+			   		start = touch.pageY; 
+		   		}
+	   		} 
+	   	},false); 
+
+	   	list.addEventListener('touchend',()=>{ 
+	   		// 若'touchend'时，ul偏移,用setInterval循环恢复ul的偏移量 
+	   		if(list.offsetTop>=0) { 
+	   			let time = setInterval(()=>{ 
+	   				list.style.top = list.offsetTop -3 +'px'; 
+	   				headerTop.style.top = list.style.top; 
+	   				// 若ul的偏移量恢复，clearInterval 
+	   				if(list.offsetTop<=0){ 
+	   					clearInterval(time); 
+	   					headerTop.innerHTML = "下拉刷新"; 
+	   					// 若恢复时'refresh===true',刷新页面 
+	   					if(refresh){ 
+	   						this.loadList();
+	   					} 
+	   				} 
+	   			}) 
+	   		} 
+	   	},false);
+
+	}
+
+	//加载列表
+	loadList(){
+
+		var code = app.getQueryString("code");
+		var leaf = app.getQueryString("leaf");
+		var module = "";
+
+		if(leaf!="1"){
+			module= code.split(':')[0];
+		}else{
+			module = code.split(':')[0]+"_"+code.split(':')[1];
+		}
+		var type = code.split(':')[1];
+		
+		var data = listData[module];
+
+		let api = '';
+		
+		if(type == 'zllr' || type == 'list') {
+			api = data.base.listlr;
+		}
+
+		app.ajax({
+			url : app.domain + '/' + api + '?pageIndex=' + this.state.PageIndex + '&pageSize=' + this.state.PageSize,
+			success:(data)=>{
+				if(data.outOk == '1') {
+					if(data.outOk == '1'){
+						this.setState({
+							ldata:data.rows1
+						})
+					}
+				}
+			}
+		});
 	}
 	
 	render(){
@@ -100,7 +170,7 @@ class List extends React.Component{
 			<div>
 				<Header titleName={title} rbut="show" abut={abut}/>
 				<div className="outer" style={{borderTop:'solid 1px #ccc'}}>
-				    <div className="inner" onScroll={this.scrollHandler}>
+				    <div id="list" className="inner">
 				        <ul className="lists">
 				            {
 								this.state.ldata.map((item) => {

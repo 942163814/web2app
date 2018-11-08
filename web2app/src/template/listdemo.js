@@ -32,7 +32,7 @@ class ListDemo extends React.Component{
 		div.addEventListener('scroll',()=>{
 
 			
-			if(div.scrollTop + div.offsetHeight >= div.scrollHeight){
+			if(div.scrollTop + div.clientHeight >= div.scrollHeight){
 				isLoad = true;
 		    	this.addLi();
 		    	setTimeout(function(){
@@ -58,7 +58,7 @@ class ListDemo extends React.Component{
 	   		let touch = event.touches[0]; 
 	   		if(div.scrollTop<=0){ 
 		   		// 若ul偏移量过大,则修改文字,refresh置为true,配合'touchend'刷新 
-		   		if(ul.offsetTop>=60) { 
+		   		if(ul.offsetTop>=50) { 
 		   			text.innerHTML = "释放刷新"; 
 		   			refresh = true; 
 		   		} else {

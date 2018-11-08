@@ -83,6 +83,7 @@ body{
     background-color: #fff;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    position: relative;
 }
 .inner .item{
     display: -webkit-box;
