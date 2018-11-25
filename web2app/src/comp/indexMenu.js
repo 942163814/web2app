@@ -77,7 +77,7 @@ class IndexMenu extends React.Component{
 		super(props);
 		this.state = {
 			data:[],
-			wdxxnum:0,
+			wdxxnum:0,//未读信息数
 			redirect:''
 		}
 	}
@@ -99,26 +99,22 @@ class IndexMenu extends React.Component{
 	
 	//获数据
 	componentDidMount(){
-		
+
 		app.ajax({
 			url : app.userMenu,
 			success:(data)=>{
-				if(data.outOk == '1') {
-					this.setState({
-						data:data.rows2
-					})
-				}
+				this.setState({
+					data:data.rows2
+				})
 			}
-		})
+		},this)
 
 		app.ajax({
 			url : app.domain + '/noReadNotify',
 			success:(data)=>{
-				if(data.outOk === 1){
-					this.setState({
-						wdxxnum:parseInt(data.outParam)
-					})
-				}
+				this.setState({
+					wdxxnum:parseInt(data.outParam)
+				})
 			}
 		})
 
@@ -126,8 +122,8 @@ class IndexMenu extends React.Component{
 	
 	//渲染
 	render(){
-
 		if (this.state.redirect != '') {
+
 			return (<Redirect to={this.state.redirect} />)
 			//return <Redirect push to={this.state.redirect} />;
 		}
