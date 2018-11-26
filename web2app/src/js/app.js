@@ -3,9 +3,9 @@ import $ from 'jquery';
 const app = {
 	//domain: 'http://192.168.1.172:8081/risdz/api',
 	//userMenu: 'http://192.168.1.172:8081/risdz/upload/user_menu',//菜单
-	domain: 'http://localhost:8088',
-	userMenu: 'http://localhost:8088/user_menu',
-	ajax: function(param) {
+	domain: 'http://118.24.175.227:1993',
+	userMenu: 'http://118.24.175.227:1993/user/menu',
+	ajax: function(param,temp) {
 
 		const url = param.url.indexOf('?') < 0 ? param.url + '?temianl=app' : param.url + '&temianl=app';
 
@@ -15,7 +15,18 @@ const app = {
 			data: '',
 			timeout: '30000',
 			success: (data) => {
-				param.success(data);
+				
+				if(data.outOk === -1){
+					temp.setState({
+						redirect:'/login'
+					})
+				}
+				else if (data.outOk === 1){
+					param.success(data);
+				}
+				
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
 			}
 		})
 	},

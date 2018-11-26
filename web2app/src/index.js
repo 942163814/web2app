@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import Home from './frame/index-home.js'; //首页
+import Login from './frame/user-login.js'; //首页
 import List from './template/list.js'; //列表
 import ListDemo from './template/listdemo.js';
 import View from './template/view.js'; //详情
@@ -19,10 +20,11 @@ ReactDOM.render(
 	<div>
 		<Router>
 			<div>
-				<Route exact path='/risdz/view/build/index.html' component={Home} />
+				<Route exact path='/' component={Home} />
 				<Route exact path='/listDemo' component={ListDemo} />
 				<Route exact path='/list' component={List} />
 				<Route exact path='/view' component={View} />
+				<Route exact path='/login' component={Login} />
 			</div>
 		</Router>
 	</div>
