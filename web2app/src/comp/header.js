@@ -53,7 +53,7 @@ class Header extends React.Component{
 					{abut}
 					<h1 id="mui_title" className="mui-title">{this.props.titleName}</h1>
 				</div>
-				<div id="headerTop" style={{height:44,position:'relative',lineHeight:'44px',textAlign:'center'}}>header</div>
+				<div id="headerTop" style={{height:44,position:'relative',lineHeight:'44px',textAlign:'center'}}></div>
 			</div>
 		)
 	}

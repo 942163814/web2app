@@ -589,3 +589,31 @@ pre{
 .nullMenu{
 	height:85px;background-color: #FFFFFF;border-bottom: 1px solid #DDDDDD;border-right: 1px solid #DDDDDD;
 }
+
+.login-title{
+	width: 80px; 
+	height: 80px;
+	position: relative; 
+	left: 50%; 
+	top: 50%;
+	transform:translate(-50%,-50%);
+	text-align:center;
+}
+
+.login-logo{
+	height: 60px;
+	border-radius: 30px;
+	box-shadow: 0px 3px 5px #CCCCCC;
+}
+
+.login-input-icon{
+	position: absolute;
+	margin-top: 6px;
+	margin-left: 5px;
+}
+
+.login-input{
+	border-radius: 25px !important;
+	text-indent:20px !important;
+	padding-left:17px !important;
+}
