@@ -16,7 +16,6 @@ require('./css/app.css');
 require('./css/icons-extra.css');
 require('./css/alert.css');
 
-
 //首页
 ReactDOM.render(
 	<div>
