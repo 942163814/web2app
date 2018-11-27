@@ -136,7 +136,8 @@ class List extends React.Component{
 		}
 
 		app.ajax({
-			url : app.domain + '/' + api + '?pageIndex=' + this.state.PageIndex + '&pageSize=' + this.state.PageSize,
+			url : app.domain + '/risdz/api?apiCode=' + api,
+			data: 'pageIndex=' + this.state.PageIndex + '&pageSize=' + this.state.PageSize,
 			success:(data)=>{
 				if(data.outOk == '1') {
 					if(data.outOk == '1'){

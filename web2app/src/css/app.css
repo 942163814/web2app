@@ -617,3 +617,19 @@ pre{
 	text-indent:20px !important;
 	padding-left:17px !important;
 }
+
+
+#header{
+	padding-left:0px !important;
+}
+
+#btn_back{
+	width: 20vw;
+	margin-right :0px !important;
+}
+
+#mui_title{
+	width: 100vw;
+    left: 0px;
+    position: absolute;
+}

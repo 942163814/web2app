@@ -5,7 +5,8 @@ const app = {
 	//domain: 'http://192.168.1.172:8081/risdz/api',
 	//userMenu: 'http://192.168.1.172:8081/risdz/upload/user_menu',//菜单
 
-	domain: 'http://118.24.175.227:1993',//node中间层地址
+	//domain: 'http://118.24.175.227:1993',//node中间层地址
+	domain: 'http://localhost:1993',//node中间层地址
 	userMenu: 'http://118.24.175.227:1993/user/menu',//用户菜单接口
 	sourceDomain: 'http://cqcskj.wicp.net:8088/risdz/view/webapp/',//资源地址
 	ajax: function(param, temp) {

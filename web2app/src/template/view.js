@@ -25,7 +25,8 @@ class View extends React.Component{
 
 	componentDidMount(){
 		app.ajax({
-			url : app.domain + '/' + this.state.getapi + '?bm=' + app.getQueryString("code"),
+			url : app.domain + '/risdz/api?apiCode=' + this.state.getapi,
+			data : 'bm=' + app.getQueryString("code"),
 			success:(data)=>{
 				if(data.outOk == '1') {
 					if(data.outOk == '1'){

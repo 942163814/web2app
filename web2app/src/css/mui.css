@@ -1478,15 +1478,13 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
 .mui-bar .mui-title
 {
-    right: 40px;
-    left: 40px;
-
+    position: relative;
     display: inline-block;
     overflow: hidden;
 
     width: auto;
     margin: 0;
-
+    
     text-overflow: ellipsis;
 }
 .mui-bar .mui-backdrop
