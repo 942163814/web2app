@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import app from '../js/app.js';
 
 /*图片轮播*/
 class PicSlider extends React.Component{
@@ -10,27 +11,27 @@ class PicSlider extends React.Component{
 				<div className="mui-slider-group mui-slider-loop">
 					<div className="mui-slider-item mui-slider-item-duplicate">
 						<a>
-							<img src={require("../images/home1.png")} />
+							<img src={app.sourceDomain + "images/home1.png"} />
 						</a>
 					</div>
 					<div className="mui-slider-item">
 						<a>
-							<img src={require("../images/home1.png")} />
+							<img src={app.sourceDomain + "images/home1.png"} />
 						</a>
 					</div>
 					<div className="mui-slider-item">
 						<a>
-							<img src={require("../images/home2.png")} />
+							<img src={app.sourceDomain + "images/home2.png"} />
 						</a>
 					</div>
 					<div className="mui-slider-item">
 						<a>
-							<img src={require("../images/home3.png")} />
+							<img src={app.sourceDomain + "images/home3.png"} />
 						</a>
 					</div>
 					<div className="mui-slider-item mui-slider-item-duplicate">
 						<a>
-							<img src={require("../images/home1.png")} />
+							<img src={app.sourceDomain + "images/home1.png"} />
 						</a>
 					</div>
 				</div>

@@ -26,11 +26,11 @@ class MenuBlock extends React.Component{
 							if (item.code === 'M8501' || item.code === 'M8601') { //事故应对方法 事故分析研判app端未做 隐藏改模块直接空模块
 								
 							} else {
-								let icon = '';
-								if(item.icon != '' && item.icon.indexOf('/view') < 0){
+								let icon = app.sourceDomain + item.icon.replace('../','');
+								/*if(item.icon != '' && item.icon.indexOf('/view') < 0){
 									icon = item.icon.replace('../','').trim();
 									icon = require('../' + icon.substring(0,icon.length-4) + '.png');
-								}
+								}*/
 								
 								return(
 									<li key={item.code} className="menu-go-page mui-table-view-cell mui-media mui-col-xs-3" code={item.code} name={item.name} leaf={item.leaf} url={item.url} href={item.href}>
@@ -97,9 +97,10 @@ class IndexMenu extends React.Component{
 
 	}
 	
-	//获数据
+	//加载菜单数据
 	componentDidMount(){
-
+		
+		//获取菜单
 		app.ajax({
 			url : app.userMenu,
 			success:(data)=>{
@@ -108,7 +109,8 @@ class IndexMenu extends React.Component{
 				})
 			}
 		},this)
-
+		
+		//获取未读信息数
 		app.ajax({
 			url : app.domain + '/noReadNotify',
 			success:(data)=>{
