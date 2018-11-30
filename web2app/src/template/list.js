@@ -5,6 +5,7 @@ import Header from '../comp/header.js';
 import listData from '../js/list_data.js';
 import '../css/list.css';
 import { Redirect } from 'react-router';
+import $ from 'jquery';
 
 class List extends React.Component{
 
@@ -35,15 +36,19 @@ class List extends React.Component{
         }
 	}*/
 	
-	componentDidMount(){
+	componentDidMount() {
+
+		/*document.body.addEventListener('touchmove', function (event) {
+		    event.preventDefault();
+		}, false);*/
 
 		/*上拉加载下拉刷新参数*/
-		let start;  // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
+		let start; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
 		let refresh = false;
 		let isLoad = false;
 		const list = document.getElementById('list');
 		const headerTop = document.getElementById('headerTop');
-		headerTop.innerHTML = "下拉刷新"; 
+		headerTop.innerHTML = "下拉刷新";
 		/*上拉加载下拉刷新参数*/
 
 		var code = app.getQueryString("code");
@@ -51,65 +56,85 @@ class List extends React.Component{
 		var leaf = app.getQueryString("leaf");
 		var module = "";
 
-		if(leaf!="1"){
-			module= code.split(':')[0];
-		}else{
-			module = code.split(':')[0]+"_"+code.split(':')[1];
+		if (leaf != "1") {
+			module = code.split(':')[0];
+		} else {
+			module = code.split(':')[0] + "_" + code.split(':')[1];
 		}
 		var type = code.split(':')[1];
-		
+
 		var data = listData[module];
 
 		this.setState({
-			code : code,
-			name : name,
-			leaf : leaf,
-			module : module,
-			type : type,
-			data : data
+			code: code,
+			name: name,
+			leaf: leaf,
+			module: module,
+			type: type,
+			data: data
 		});
 
 		this.loadList();
 
-		list.addEventListener('touchstart',function(event){ 
-	   		let touch = event.touches[0]; 
-	   		start = touch.pageY; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标 
-	   	},false); 
+		list.addEventListener('touchstart', function(event) {
+			let touch = event.touches[0];
+			start = touch.pageY; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标 
+		}, false);
 
-		list.addEventListener('touchmove',function(event){ // 下拉刷新 
-	   		let touch = event.touches[0]; 
-	   		if(list.scrollTop<=0){ 
-		   		// 若ul偏移量过大,则修改文字,refresh置为true,配合'touchend'刷新 
-		   		if(list.offsetTop>=60) { 
-		   			headerTop.innerHTML = "释放刷新"; 
-		   			refresh = true; 
-		   		} else {
-		   			// 如果ul列表到顶部，修改ul列表的偏移,显示“下拉刷新”，并准备触发下拉刷新功能，可自定义 
-			   		list.style.top = list.offsetTop + touch.pageY - start +'px'; // ul.style.top = ul.offsetTop + 'px' 
-			   		headerTop.style.top = list.style.top;
-			   		start = touch.pageY; 
-		   		}
-	   		} 
-	   	},false); 
+		function listMove(event){
 
-	   	list.addEventListener('touchend',()=>{ 
-	   		// 若'touchend'时，ul偏移,用setInterval循环恢复ul的偏移量 
-	   		if(list.offsetTop>=0) { 
-	   			let time = setInterval(()=>{ 
-	   				list.style.top = list.offsetTop -3 +'px'; 
-	   				headerTop.style.top = list.style.top; 
-	   				// 若ul的偏移量恢复，clearInterval 
-	   				if(list.offsetTop<=0){ 
-	   					clearInterval(time); 
-	   					headerTop.innerHTML = "下拉刷新"; 
-	   					// 若恢复时'refresh===true',刷新页面 
-	   					if(refresh){ 
-	   						this.loadList();
-	   					} 
-	   				} 
-	   			}) 
-	   		} 
-	   	},false);
+			let scrollTop=0; 
+			if(document.documentElement&&document.documentElement.scrollTop){ 
+				scrollTop=document.documentElement.scrollTop; 
+			}else if(document.body){ 
+				scrollTop=document.body.scrollTop; 
+			} 
+
+			let touch = event.touches[0];
+			
+			if (touch.pageY > start) {
+				if (scrollTop <= 0) {
+					event.preventDefault();
+					if (list.scrollTop <= 0) {
+						// 若ul偏移量过大,则修改文字,refresh置为true,配合'touchend'刷新 
+						if (list.offsetTop >= 60) {
+							headerTop.innerHTML = "释放刷新";
+							refresh = true;
+						} else {
+							// 如果ul列表到顶部，修改ul列表的偏移,显示“下拉刷新”，并准备触发下拉刷新功能，可自定义 
+							list.style.top = list.offsetTop + touch.pageY - start + 'px'; // ul.style.top = ul.offsetTop + 'px' 
+							headerTop.style.top = list.style.top;
+							start = touch.pageY;
+						}
+					}
+				}
+			} else {
+				list.removeEventListener('touchmove', listMove, false);
+			}
+			
+		}
+
+		list.addEventListener('touchmove', listMove, false);
+
+		list.addEventListener('touchend', () => {
+			list.addEventListener('touchmove', listMove, false);
+			// 若'touchend'时，ul偏移,用setInterval循环恢复ul的偏移量 
+			if (list.offsetTop >= 0) {
+				let time = setInterval(() => {
+					list.style.top = list.offsetTop - 3 + 'px';
+					headerTop.style.top = list.style.top;
+					// 若ul的偏移量恢复，clearInterval 
+					if (list.offsetTop <= 0) {
+						clearInterval(time);
+						headerTop.innerHTML = "下拉刷新";
+						// 若恢复时'refresh===true',刷新页面 
+						if (refresh) {
+							this.loadList();
+						}
+					}
+				})
+			}
+		}, false);
 
 	}
 
@@ -170,7 +195,7 @@ class List extends React.Component{
 		return(
 			<div>
 				<Header titleName={title} rbut="show" abut={abut}/>
-				<div className="outer" style={{borderTop:'solid 1px #ccc'}}>
+				<div className="outer">
 				    <div id="list" className="inner">
 				        <ul className="lists">
 				            {
