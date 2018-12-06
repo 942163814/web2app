@@ -34,7 +34,7 @@ body{
     font-size: 1.2em;
 }
 .outer{
-    position: relative;
+    position: fixed;
     left: 0;
     width: 100%;
     height: 100%;
@@ -47,6 +47,7 @@ body{
     box-orient:vertical;
     -webkit-flex-direction:column;
     flex-direction:column;
+    padding-bottom: 44px;
 }
 .header{
     position: relative;
@@ -83,7 +84,6 @@ body{
     background-color: #fff;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    position: relative;
 }
 .inner .item{
     display: -webkit-box;
@@ -128,67 +128,6 @@ body{
 .opacity{
     -webkit-animation: opacity 0.3s linear;
     animation: opacity 0.3s linear;
-}
-#complexsearch_box {
-	position: absolute;
-	z-index: 99999;
-	width: 100%;
-	top: 90px;
-}
-.complexitem {
-	height: 35px;
-	line-height: 35px;
-	text-align: center;
-	font-size: 13px;
-}
-
-#list_bottom_box {
-	height: 20px;
-	display: none;
-}
-
-.complexitem {
-	height: 35px;
-	line-height: 35px;
-	text-align: center;
-	font-size: 13px;
-}
-
-.upicon {
-	float: right;
-	color: #aaa;
-	margin-right: 7px;
-	margin-top: 6px;
-}
-
-.radioitem,
-.radioitem1 {
-	padding-right: 0;
-	padding: 9px 15px;
-	border-bottom: 1px solid #ECECEC;
-}
-
-.option {
-	margin-top: 5px;
-	margin-left: 7px;
-}
-
-.input-date {
-	margin-bottom: 0px !important;
-	text-align: right;
-}
-
-.toast_box {
-	padding: 5px;
-	border-top: 1px solid #ccc;
-	background-color: white;
-	position: absolute;
-	z-index: 99999;
-	width: 100%;
-	border-bottom: solid 1px #ccc;
-	color: #333;
-	font-size: 14px;
-	top: 92px;
 }
 @-webkit-keyframes opacity {
     0% {

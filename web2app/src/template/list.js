@@ -6,6 +6,8 @@ import listData from '../js/list_data.js';
 import '../css/list.css';
 import { Redirect } from 'react-router';
 import $ from 'jquery';
+require('../js/dist/dropload.css');
+require('../js/dist/dropload.js');
 
 class List extends React.Component{
 
@@ -27,29 +29,10 @@ class List extends React.Component{
 
 		//this.scrollHandler = this.scrollHandler.bind(this);
 		this.loadList = this.loadList.bind(this);
+		this.dropload = null;
 	}
-
-	/*scrollHandler(event){
-		let scrollTop = event.currentTarget.scrollTop;
-        if(scrollTop === 0){
-        	console.log(scrollTop);
-        }
-	}*/
 	
 	componentDidMount() {
-
-		/*document.body.addEventListener('touchmove', function (event) {
-		    event.preventDefault();
-		}, false);*/
-
-		/*上拉加载下拉刷新参数*/
-		let start; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
-		let refresh = false;
-		let isLoad = false;
-		const list = document.getElementById('list');
-		const headerTop = document.getElementById('headerTop');
-		headerTop.innerHTML = "下拉刷新";
-		/*上拉加载下拉刷新参数*/
 
 		var code = app.getQueryString("code");
 		var name = app.getQueryString("name");
@@ -74,67 +57,27 @@ class List extends React.Component{
 			data: data
 		});
 
-		this.loadList();
+		
 
-		list.addEventListener('touchstart', function(event) {
-			let touch = event.touches[0];
-			start = touch.pageY; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标 
-		}, false);
-
-		function listMove(event){
-
-			let scrollTop=0; 
-			if(document.documentElement&&document.documentElement.scrollTop){ 
-				scrollTop=document.documentElement.scrollTop; 
-			}else if(document.body){ 
-				scrollTop=document.body.scrollTop; 
-			} 
-
-			let touch = event.touches[0];
-			
-			if (touch.pageY > start) {
-				if (scrollTop <= 0) {
-					event.preventDefault();
-					if (list.scrollTop <= 0) {
-						// 若ul偏移量过大,则修改文字,refresh置为true,配合'touchend'刷新 
-						if (list.offsetTop >= 60) {
-							headerTop.innerHTML = "释放刷新";
-							refresh = true;
-						} else {
-							// 如果ul列表到顶部，修改ul列表的偏移,显示“下拉刷新”，并准备触发下拉刷新功能，可自定义 
-							list.style.top = list.offsetTop + touch.pageY - start + 'px'; // ul.style.top = ul.offsetTop + 'px' 
-							headerTop.style.top = list.style.top;
-							start = touch.pageY;
-						}
-					}
+		this.dropload = $('.inner').dropload({
+			loadUpFn: (me) => {
+				console.log('下拉刷新触发');
+				this.setState({
+					PageIndex: 1
+				});
+				this.loadList();
+			},
+			loadDownFn: (me) => {
+				if (me.isData) {
+					console.log('上滑加载触发');
+					//page.info.isRefresh = false;
+					//page.loadData();
+					this.loadList();
+				} else {
+					me.resetload();
 				}
-			} else {
-				list.removeEventListener('touchmove', listMove, false);
 			}
-			
-		}
-
-		list.addEventListener('touchmove', listMove, false);
-
-		list.addEventListener('touchend', () => {
-			list.addEventListener('touchmove', listMove, false);
-			// 若'touchend'时，ul偏移,用setInterval循环恢复ul的偏移量 
-			if (list.offsetTop >= 0) {
-				let time = setInterval(() => {
-					list.style.top = list.offsetTop - 3 + 'px';
-					headerTop.style.top = list.style.top;
-					// 若ul的偏移量恢复，clearInterval 
-					if (list.offsetTop <= 0) {
-						clearInterval(time);
-						headerTop.innerHTML = "下拉刷新";
-						// 若恢复时'refresh===true',刷新页面 
-						if (refresh) {
-							this.loadList();
-						}
-					}
-				})
-			}
-		}, false);
+		});
 
 	}
 
@@ -164,13 +107,26 @@ class List extends React.Component{
 			url : app.domain + '/risdz/api?apiCode=' + api,
 			data: 'pageIndex=' + this.state.PageIndex + '&pageSize=' + this.state.PageSize,
 			success:(data)=>{
-				if(data.outOk == '1') {
-					if(data.outOk == '1'){
-						this.setState({
-							ldata:data.rows1
-						})
-					}
+				let rows;
+				if(this.state.PageIndex == '1'){//第一页
+					rows = data.rows1;
 				}
+				else{//后面页数直接push数据
+					rows = this.state.ldata;
+					rows.push(...data.rows1);
+				}
+				let TotalPageCount = data.TotalPageCount;
+				if(parseInt(this.state.PageIndex) >= parseInt(TotalPageCount)){
+					this.dropload.noData(true);
+				}else{
+					this.dropload.noData(false);
+				}
+				this.setState({
+					ldata: rows,
+					PageIndex: this.state.PageIndex + 1,
+					TotalPageCount: TotalPageCount
+				})
+				this.dropload.resetload();
 			}
 		});
 	}
