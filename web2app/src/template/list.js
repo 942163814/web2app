@@ -107,6 +107,7 @@ class List extends React.Component{
 			url : app.domain + '/risdz/api?apiCode=' + api,
 			data: 'pageIndex=' + this.state.PageIndex + '&pageSize=' + this.state.PageSize,
 			success:(data)=>{
+				console.log('success');
 				let rows;
 				if(this.state.PageIndex == '1'){//第一页
 					rows = data.rows1;
@@ -252,7 +253,6 @@ class ListItem extends React.Component{
 
 	//点击列表项
 	clickItem(){
-
 		var code = app.getQueryString("code");
 		var leaf = app.getQueryString("leaf");
 		var module = "";
@@ -266,6 +266,15 @@ class ListItem extends React.Component{
 		this.setState({
 			viewurl:'/view?code=' + this.props.listData.bm + '&module=' + module + app.uplink()
 		})
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if(nextState.viewurl != ''){//路由地址不为''，继续render
+			return true;
+		} else {
+			//判断这次列表数据是否与要渲染的数据一致，一致则不render，不一致继续render
+			return JSON.stringify(this.props.listData) != JSON.stringify(nextProps.listData);
+		}
 	}
 
 	render(){
